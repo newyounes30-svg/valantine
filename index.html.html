@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeartLink - Valentine ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #a73737 0%, #7a2828 100%); /* خلفية متدرجة */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* تأثير القلوب المتحركة في الخلفية */
+        .heart-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .heart-bg span {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            width: 15px;
+            height: 15px;
+            transform: rotate(45deg);
+            animation: moveHearts 10s linear infinite;
+        }
+        .heart-bg span::before,
+        .heart-bg span::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .heart-bg span::before { left: -7.5px; }
+        .heart-bg span::after { top: -7.5px; }
+
+        @keyframes moveHearts {
+            0% { transform: translate(0, 0) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translate(100vw, -100vh) rotate(45deg); opacity: 0; }
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.3); /* خلفية شبه شفافة */
+            backdrop-filter: blur(10px); /* تأثير الزجاج */
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            z-index: 1;
+            transition: all 0.5s ease-in-out;
+        }
+        .hidden { display: none; }
+
+        /* صفحة الباسورد */
+        .password-section h1 { font-size: 2.2em; color: #ffeb3b; }
+        .password-section p { font-size: 1.1em; margin-bottom: 25px; }
+        .password-section input {
+            width: calc(80% - 20px);
+            padding: 12px 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            text-align: center;
+            font-size: 1.1em;
+            outline: none;
+        }
+        .password-section input::placeholder { color: rgba(255, 255, 255, 0.7); }
+        .password-section button {
+            background: linear-gradient(90deg, #ff4081, #ff80ab);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 64, 129, 0.4);
+            transition: 0.3s ease;
+            margin-top: 10px;
+        }
+        .password-section button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 64, 129, 0.6); }
+        .password-section .error-msg {
+            color: #ffeb3b;
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+        }
+        
+        /* محتوى المفاجأة */
+        .content-section {
+            padding: 20px 0;
+        }
+        .content-section h2 { font-size: 1.8em; color: #ffeb3b; margin-bottom: 25px; }
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .timer-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 15px 10px;
+            border-radius: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+        .timer-item small {
+            display: block;
+            font-size: 0.6em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 5px;
+        }
+        
+        /* مشغل الموسيقى */
+        .audio-player {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .audio-player button {
+            background: none;
+            border: none;
+            color: #ffeb3b;
+            font-size: 1.8em;
+            cursor: pointer;
+        }
+        .audio-player input[type="range"] {
+            -webkit-appearance: none;
+            width: 70%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            outline: none;
+        }
+        .audio-player input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ffeb3b;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(255, 235, 59, 0.5);
+        }
+
+        /* كروت الصور والنصوص */
+        .card-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 15px;
+        }
+        .card-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            margin-bottom: 10px;
+        }
+        .card-item .text {
+            color: #fff;
+            font-size: 1.1em;
+            padding: 0 15px;
+            margin-bottom: 10px;
+        }
+        .card-item .small-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8em;
+            padding: 0 15px;
+        }
+        
+        /* الرسالة المنبثقة */
+        .popup-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 10;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+        .popup-message .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            cursor: pointer;
+        }
+        .popup-message h3 { color: #ffeb3b; margin-bottom: 15px; font-size: 1.5em; }
+        .popup-message p { color: #fff; font-size: 1.1em; line-height: 1.6; }
+
+    </style>
+</head>
+<body>
+    <div class="heart-bg"></div> <div class="container" id="mainContainer">
+        <div class="password-section" id="passwordSection">
+            <img src="https://i.postimg.cc/ZK4CHR8w/Screenshot-20260208-230632-Whats-App.jpg" alt="Heart Icon" style="width: 80px; margin-bottom: 10px;">
+            <h1>عيد الحب ❤️</h1>
+            <p>جاهزه ياغرومتي</p>
+            <input type="password" id="passwordInput" placeholder="اكتبي الباسورد ي ❤️">
+            <button onclick="checkPassword()">دوسي هنا لفتح قلبي ❤️</button>
+            <p class="error-msg" id="errorMessage">🎨 غلط! ركزي شوية يا فنانة</p>
+            <p style="font-size: 0.9em; color: rgba(255,255,255,0.8); margin-top: 20px;">لمسة بسيطة... وبعدها هتبدأ الحكاية</p>
+        </div>
+
+        <div class="content-section hidden" id="contentSection">
+            <h2>بداية حكاياتنا 🥰❤️</h2>
+            <div class="timer-grid">
+                <div class="timer-item" id="years">00 <small>سنين</small></div>
+                <div class="timer-item" id="months">00 <small>شهور</small></div>
+                <div class="timer-item" id="days">00 <small>أيام</small></div>
+                <div class="timer-item" id="hours">00 <small>ساعات</small></div>
+                <div class="timer-item" id="minutes">00 <small>دقايق</small></div>
+                <div class="timer-item" id="seconds">00 <small>ثواني</small></div>
+            </div>
+
+            <div class="audio-player">
+                <button id="playPauseBtn">▶️</button>
+                <input type="range" id="progressBar" value="0" step="0.1">
+                <button id="volumeBtn">🔊</button>
+                <audio id="myAudio" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop></audio> </div>
+
+            <div class="card-item">
+                <img src="https://i.postimg.cc/nz3wWMsY/IMG-20260208-WA0042.jpg" alt="Image 1">
+                <p class="text">بحبك انتي وبس ❤️</p>
+            </div>
+
+            <div class="card-item">
+                <img src="https://i.postimg.cc/x1P7msfj/IMG-20260208-WA0040.jpg" alt="Image 2">
+                <p class="text">I love you, Today, Tomorrow, And always.</p>
+                <p class="small-text">"سوف أحبك اليوم وغداً وإلى الأبد"</p>
+            </div>
+            
+            <div class="card-item">
+                <img src="https://i.postimg.cc/d1W4SNHF/IMG-20241031-WA0066.jpg">
+                <p class="text">انت أجمل صدفة في حياتي كلها</p>
+            </div>
+
+            <button onclick="showMessage()">دوسي ومتستعجليش! 😊</button>
+        </div>
+    </div>
+
+    <div class="popup-message" id="finalMessagePopup">
+        <button class="close-btn" onclick="hideMessage()">✖️</button>
+        <h3>رسالة ليكي 💌</h3>
+        <p>تغيب الشمس والناس تنام .. <br> يغيب القمر ويزيد الظلام .. <br> لكن 
+       تغيب أنتِ هذا حرام!
+       بحبك يغرومتي</p>
+    </div>
+
+    <script>
+        // --- 1. إعدادات الموقع (عدّل هنا) ---
+        const correctPassword = "552025"; // الباسورد الصحيح
+        const startDate = new Date("2022-05-25T00:00:00"); // تاريخ بداية العلاقة (مهم جداً لتشغيل العداد)
+                                                            // السنة-الشهر-اليوم
+        const audioFile = "https://pomf2.lain.la/f/eziotno8.mp3"; // رابط الأغنية بتاعتك (MP3)
+
+
+        // --- 2. كود الباسورد ---
+        function checkPassword() {
+            const userInput = document.getElementById('passwordInput').value;
+            const errorMsg = document.getElementById('errorMessage');
+            if (userInput === correctPassword) {
+                document.getElementById('passwordSection').classList.add('hidden');
+                document.getElementById('contentSection').classList.remove('hidden');
+                errorMsg.style.display = 'none';
+                updateTimer(); // بدأ تشغيل العداد
+                myAudio.play(); // تشغيل الأغنية تلقائياً
+            } else {
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        // --- 3. كود العداد الزمني ---
+        const timerElements = {
+            years: document.getElementById('years'),
+            months: document.getElementById('months'),
+            days: document.getElementById('days'),
+            hours: document.getElementById('hours'),
+            minutes: document.getElementById('minutes'),
+            seconds: document.getElementById('seconds')
+        };
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now.getTime() - startDate.getTime(); // الفرق بالمللي ثانية
+
+            let seconds = Math.floor(diff / 1000);
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+            let days = Math.floor(hours / 24);
+
+            const years = Math.floor(days / 365.25); // تقريبي للسنين
+            const remainingDaysAfterYears = Math.floor(days % 365.25);
+            
+            // حساب الشهور بشكل تقريبي (ممكن يحتاج مكتبة معقدة لحساب دقيق للشهر)
+            const months = Math.floor(remainingDaysAfterYears / 30.44); // متوسط عدد الأيام في الشهر
+            
+            days = remainingDaysAfterYears % 30.44; // الأيام المتبقية بعد حساب الشهور
+
+            hours %= 24;
+            minutes %= 60;
+            seconds %= 60;
+
+            timerElements.years.innerHTML = years.toString().padStart(2, '0') + ' <small>سنين</small>';
+            timerElements.months.innerHTML = months.toString().padStart(2, '0') + ' <small>شهور</small>';
+            timerElements.days.innerHTML = Math.floor(days).toString().padStart(2, '0') + ' <small>أيام</small>';
+            timerElements.hours.innerHTML = hours.toString().padStart(2, '0') + ' <small>ساعات</small>';
+            timerElements.minutes.innerHTML = minutes.toString().padStart(2, '0') + ' <small>دقايق</small>';
+            timerElements.seconds.innerHTML = seconds.toString().padStart(2, '0') + ' <small>ثواني</small>';
+        }
+
+        setInterval(updateTimer, 1000); // تحديث العداد كل ثانية
+        
+        // --- 4. كود مشغل الصوت ---
+        const myAudio = document.getElementById('myAudio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const progressBar = document.getElementById('progressBar');
+
+        myAudio.src = audioFile; // تعيين رابط الأغنية
+
+        playPauseBtn.addEventListener('click', () => {
+            if (myAudio.paused) {
+                myAudio.play();
+                playPauseBtn.textContent = '⏸️';
+            } else {
+                myAudio.pause();
+                playPauseBtn.textContent = '▶️';
+            }
+        });
+
+        volumeBtn.addEventListener('click', () => {
+            if (myAudio.muted) {
+                myAudio.muted = false;
+                volumeBtn.textContent = '🔊';
+            } else {
+                myAudio.muted = true;
+                volumeBtn.textContent = '🔇';
+            }
+        });
+
+        myAudio.addEventListener('timeupdate', () => {
+            progressBar.value = (myAudio.currentTime / myAudio.duration) * 100;
+        });
+
+        progressBar.addEventListener('input', () => {
+            myAudio.currentTime = (progressBar.value / 100) * myAudio.duration;
+        });
+
+        // --- 5. كود الرسالة المنبثقة ---
+        function showMessage() {
+            document.getElementById('finalMessagePopup').style.display = 'flex';
+        }
+
+        function hideMessage() {
+            document.getElementById('finalMessagePopup').style.display = 'none';
+        }
+
+        // --- 6. تأثير القلوب المتحركة (توليد عشوائي) ---
+        const heartBg = document.querySelector('.heart-bg');
+        function createHeart() {
+            const heart = document.createElement('span');
+            heartBg.appendChild(heart);
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 5 + 's'; // 5-10 seconds
+            heart.style.opacity = Math.random();
+            heart.style.fontSize = Math.random() * 10 + 5 + 'px'; // 5-15px
+
+            setTimeout(() => {
+                heart.remove();
+            }, 10000); // إزالة القلب بعد انتهاء الـ animation
+        }
+        setInterval(createHeart, 300); // إنشاء قلب جديد كل 300 مللي ثانية
+
+    </script>
+</body>
+</html>
